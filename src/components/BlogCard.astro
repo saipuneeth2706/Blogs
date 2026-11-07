@@ -1,0 +1,111 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	pubDate: string;
+	sortDate: string;
+	readTime: number;
+	heroImage?: string;
+	tags: string[];
+	featured?: boolean;
+}
+
+const {
+	title,
+	description,
+	pubDate,
+	sortDate,
+	readTime,
+	heroImage,
+	tags,
+	featured = false,
+} = Astro.props;
+---
+
+<li
+	data-post-card
+	data-pubdate={sortDate}
+	data-readtime={readTime}
+	data-featured={featured || undefined}
+	data-search={`${title} ${description} ${tags.join(' ')}`.toLowerCase()}
+	class={featured ? 'sm:col-span-2 lg:col-span-3 list-none' : ''}
+>
+	<a
+		href="#"
+		class={`group grid h-full flex-col border-4 border-ink shadow-[8px_8px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_0_#000] sm:flex ${
+			featured ? 'sm:grid sm:grid-cols-2 bg-ground' : 'flex bg-white'
+		}`}
+	>
+		{
+			heroImage ? (
+				featured ? (
+					<div class="min-h-56 border-b-4 border-ink sm:min-h-0 sm:border-r-4 sm:border-b-0">
+						<img
+							src={heroImage}
+							alt={`Cover image for “${title}”`}
+							class="h-56 w-full object-cover sm:h-full"
+							loading="lazy"
+						/>
+					</div>
+				) : (
+					<img
+						src={heroImage}
+						alt={`Cover image for “${title}”`}
+						class="aspect-3/2 w-full border-b-4 border-ink object-cover"
+						loading="lazy"
+					/>
+				)
+			) : featured ? (
+				<div
+					class="min-h-56 border-b-4 border-ink bg-quiet sm:min-h-0 sm:border-r-4 sm:border-b-0"
+					aria-hidden="true"
+				/>
+			) : (
+				<div
+					class="aspect-3/2 w-full border-b-4 border-ink bg-quiet"
+					aria-hidden="true"
+				/>
+			)
+		}
+		<div class={`flex flex-1 flex-col gap-3 ${featured ? 'bg-support p-8' : 'p-6'}`}>
+			<p class="flex items-center gap-3 text-[14px] leading-none font-semibold uppercase">
+				{
+					featured && (
+						<span class="bg-ink px-2 py-1 text-white">Featured</span>
+					)
+				}
+				<time>{pubDate}</time>
+				<span aria-hidden="true">·</span>
+				<span>{readTime} min read</span>
+			</p>
+			<h3
+				class={`${featured ? 'text-4xl' : 'text-2xl min-h-[60px] line-clamp-2'} leading-tight font-extrabold tracking-tighter`}
+			>
+				{title}
+			</h3>
+			<p
+				class={featured ? 'text-[17px] leading-relaxed font-normal' : 'min-h-[83px] text-[17px] leading-relaxed font-normal line-clamp-3'}
+			>
+				{description}
+			</p>
+			{
+				featured ? (
+					<span class="mt-auto self-start border-4 border-ink bg-accent px-6 py-3.5 text-[15px] leading-none font-bold text-white uppercase [--tw-shadow:6px_6px_0_0_#000] shadow-(--tw-shadow) group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-(--tw-shadow) group-active:shadow-none">
+						Read the post →
+					</span>
+				) : null
+			}
+			{
+				tags.length > 0 && (
+					<ul class={`flex flex-wrap gap-2 ${featured ? 'pt-2' : 'mt-auto pt-2'}`}>
+						{tags.map((tag) => (
+							<li class="border-2 border-ink bg-white px-2 py-0.5 text-[14px] leading-none font-semibold uppercase">
+								{tag}
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</div>
+	</a>
+</li>

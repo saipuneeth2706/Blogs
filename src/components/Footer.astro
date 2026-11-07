@@ -1,0 +1,35 @@
+---
+import { SITE } from '../lib/posts';
+
+const year = new Date().getFullYear();
+---
+
+<footer id="about" class="border-t-4 border-ink bg-ink text-white">
+	<div
+		class="mx-auto grid max-w-[1200px] gap-10 px-gutter py-14 sm:grid-cols-2 lg:gap-6"
+	>
+		<div>
+			<p class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase">
+				<span aria-hidden="true" class="block size-4 bg-support"></span>
+				{SITE.name}
+			</p>
+			<p class="mt-4 max-w-sm text-[17px] font-normal text-white/80 leading-relaxed">
+				{SITE.tagline} Essays, notes and guides — written to be read.
+			</p>
+		</div>
+		<nav aria-label="Footer" class="sm:justify-self-end">
+			<ul class="flex flex-col gap-3 text-[15px] font-semibold uppercase">
+				<li><a class="hover:underline underline-offset-4" href="#posts">All posts</a></li>
+				<li><a class="hover:underline underline-offset-4" href="#top">Back to top</a></li>
+			</ul>
+		</nav>
+	</div>
+	<div class="border-t border-white/20">
+		<div
+			class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-gutter py-4 text-[14px] text-white/60"
+		>
+			<p>&copy; {year} {SITE.name}</p>
+			<p>Set in Host Grotesk. Built with Astro.</p>
+		</div>
+	</div>
+</footer>

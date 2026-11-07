@@ -1,0 +1,37 @@
+---
+import { SITE } from '../lib/posts';
+---
+
+<header class="border-b-4 border-ink bg-ground">
+	<div
+		class="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-gutter"
+	>
+		<a
+			href="#top"
+			class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase"
+		>
+			<span aria-hidden="true" class="block size-4 bg-accent"></span>
+			{SITE.name}
+		</a>
+		<nav aria-label="Main">
+			<ul
+				class="flex items-center gap-4 text-[15px] font-semibold uppercase sm:gap-6"
+			>
+				<li>
+					<a
+						href="#posts"
+						class="hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
+						>Posts</a
+					>
+				</li>
+				<li>
+					<a
+						href="#about"
+						class="hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
+						>About</a
+					>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</header>
