@@ -13,6 +13,7 @@ A Bauhaus-styled blog built with [Astro](https://astro.build), Tailwind CSS v4 a
   - Three-column layout: article spans columns 1–2, related-post sidebar sticky in column 3
   - Markdown rendered from the content collection with hand-rolled `.prose-bauhaus` typography
   - Tag-based related posts: shared-tag count first, recency as tiebreak, then most-recent fallback — capped at 4
+- **Page transitions** via Astro's client router (View Transitions): clicking a card morphs its border box into the open article area on the reading page; sidebar cards morph into the post they point to; home search text, sort and scroll position all survive the round trip
 - **Back-to-top button** — slides in from the right edge after scrolling ~75% of a viewport; respects `prefers-reduced-motion`
 - **Logo mark** — black-outlined red triangle, blue square and yellow circle; outlines invert to white on the black footer
 - **Accessibility** — visible focus states, keyboard-friendly controls, reduced-motion support, LTR left-aligned text throughout

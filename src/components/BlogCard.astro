@@ -36,6 +36,8 @@ const {
 >
 	<a
 		href={`/posts/${slug}/`}
+		transition:name={`post-${slug}`}
+		style="view-transition-class: post-panel"
 		class={`group grid h-full flex-col border-4 border-ink shadow-[8px_8px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_0_#000] sm:flex ${
 			featured ? 'sm:grid sm:grid-cols-2 bg-ground' : 'flex bg-white'
 		}`}

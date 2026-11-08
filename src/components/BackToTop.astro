@@ -29,24 +29,30 @@ import { Icon } from 'astro-icon/components';
 </style>
 
 <script>
-	const button = document.getElementById('back-to-top') as HTMLAnchorElement;
-	if (button) {
+	// Re-bind on every navigation: the router swaps <body>, so each
+	// astro:page-load introduces a fresh #back-to-top element.
+	let cleanupScroll: (() => void) | undefined;
+	const init = () => {
+		cleanupScroll?.();
+		const button = document.getElementById('back-to-top') as HTMLAnchorElement | null;
+		if (!button) return;
 		let ticking = false;
 		const update = () => {
 			const shown = window.scrollY > window.innerHeight * 0.75;
 			button.classList.toggle('is-shown', shown);
 			button.toggleAttribute('inert', !shown);
 		};
-
-		window.addEventListener('scroll', () => {
+		const onScroll = () => {
 			if (ticking) return;
 			ticking = true;
 			requestAnimationFrame(() => {
 				update();
 				ticking = false;
 			});
-		}, { passive: true });
-
+		};
+		window.addEventListener('scroll', onScroll, { passive: true });
 		update();
-	}
+		cleanupScroll = () => window.removeEventListener('scroll', onScroll);
+	};
+	document.addEventListener('astro:page-load', init);
 </script>

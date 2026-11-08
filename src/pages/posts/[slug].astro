@@ -1,6 +1,7 @@
 ---
 import '../../styles/global.css';
 import { getCollection, render } from 'astro:content';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import BackToTop from '../../components/BackToTop.astro';
@@ -42,14 +43,20 @@ const related = scored.slice(0, 4);
 		<title>{post.data.title} — {SITE.name}</title>
 		<meta name="description" content={post.data.description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<ClientRouter />
 	</head>
 	<body class="min-h-screen bg-ground font-display text-ink">
 		<Header />
 
 		<main class="mx-auto max-w-[1200px] px-gutter pt-10 pb-16">
-			<!-- Three columns: article spans the first two, sidebar the third -->
+			<!-- The article shares the clicked card's transition name,
+			     so the card morphs into this open content block -->
 			<div class="grid max-w-full grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
-				<article class="min-w-0 md:col-span-2">
+				<article
+					transition:name={`post-${post.id}`}
+					style="view-transition-class: post-panel"
+					class="min-w-0 md:col-span-2"
+				>
 					<a
 						href="/"
 						class="inline-flex items-center gap-2 border-4 border-ink bg-white px-4 py-2 text-[15px] leading-none font-semibold uppercase hover:translate-x-[2px] hover:translate-y-[2px]"
@@ -130,6 +137,8 @@ const related = scored.slice(0, 4);
 								<li>
 									<a
 										href={`/posts/${relatedPost.id}/`}
+										transition:name={`post-${relatedPost.id}`}
+										style="view-transition-class: post-panel"
 										class="group flex flex-col gap-2 border-4 border-ink bg-white p-5 shadow-[6px_6px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_0_#000]"
 									>
 										<p class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] leading-none font-semibold uppercase">

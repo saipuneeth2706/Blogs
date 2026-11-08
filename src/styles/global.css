@@ -171,6 +171,33 @@ svg.astro-icon {
 	vertical-align: -0.12em;
 }
 
+/* Page transitions (ClientRouter / View Transitions API):
+   the named .post-panel pair morphs grid card <-> article panel
+   while the rest of the page crossfades briskly. */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 140ms;
+}
+
+::view-transition-group(.post-panel) {
+	animation-duration: 300ms;
+	animation-timing-function: cubic-bezier(0.22, 0.85, 0.2, 1);
+}
+
+::view-transition-old(.post-panel),
+::view-transition-new(.post-panel) {
+	animation-duration: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-image-pair(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

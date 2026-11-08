@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
+import { ClientRouter } from 'astro:transitions';
 import { Icon } from 'astro-icon/components';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -26,6 +27,7 @@ const totalPosts = posts.length;
 		<title>{SITE.name} — {SITE.tagline}</title>
 		<meta name="description" content={SITE.description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<ClientRouter />
 	</head>
 	<body class="min-h-screen bg-ground font-display text-ink">
 		<Header />
@@ -144,65 +146,130 @@ const totalPosts = posts.length;
 		<BackToTop />
 
 		<script>
-			const input = document.getElementById('blog-search') as HTMLInputElement;
-			const sortSelect = document.getElementById('post-sort') as HTMLSelectElement;
-			const grid = document.querySelector<HTMLElement>('#post-grid')!;
-			const countEl = document.getElementById('search-count')!;
-			const emptyEl = document.getElementById('search-empty')!;
+			// Lives in sessionStorage so the grid state survives a round
+			// trip through a post page during view-transition navigation.
+			const QUERY_KEY = 'theblog:search-query';
+			const SORT_KEY = 'theblog:search-sort';
+			const RETURN_FLAG = 'theblog:return-home';
+			const RETURN_SCROLL = 'theblog:return-scroll';
 
-			const allCards = Array.from(
-				document.querySelectorAll<HTMLElement>('[data-post-card]'),
+			// Registered once per document (which survives router swaps):
+			// mark outgoing navigations so home can restore the spot you
+			// left from — clicking into a post, or "All posts"/logo back.
+			document.addEventListener(
+				'click',
+				(event) => {
+					if (
+						event.defaultPrevented ||
+						event.button !== 0 ||
+						event.metaKey ||
+						event.ctrlKey ||
+						event.shiftKey ||
+						event.altKey
+					) {
+						return;
+					}
+					const anchor = (event.target as Element | null)?.closest?.('a');
+					if (!anchor) return;
+					const target = new URL(anchor.href, location.href);
+					if (location.pathname === '/' && target.pathname.startsWith('/posts/')) {
+						sessionStorage.setItem(RETURN_FLAG, '1');
+						sessionStorage.setItem(RETURN_SCROLL, String(Math.round(window.scrollY)));
+					} else if (location.pathname !== '/' && target.pathname === '/') {
+						sessionStorage.setItem(RETURN_FLAG, '1');
+					}
+				},
+				true,
 			);
 
-			function getCards() {
-				return Array.from(
-					grid.querySelectorAll<HTMLElement>('[data-post-card]'),
+			function initGrid() {
+				const input = document.getElementById('blog-search') as HTMLInputElement | null;
+				const sortSelect = document.getElementById('post-sort') as HTMLSelectElement | null;
+				const grid = document.querySelector<HTMLElement>('#post-grid');
+				const countEl = document.getElementById('search-count');
+				const emptyEl = document.getElementById('search-empty');
+				if (!input || !sortSelect || !grid || !countEl || !emptyEl) return;
+
+				const allCards = Array.from(
+					document.querySelectorAll<HTMLElement>('[data-post-card]'),
 				);
+
+				// Search counts every card (featured banner included)
+				const applyFilter = () => {
+					const query = input.value.trim().toLowerCase();
+					let shown = 0;
+
+					for (const card of allCards) {
+						const match = query === '' || card.dataset.search!.includes(query);
+						card.hidden = !match;
+						if (match) shown++;
+					}
+
+					countEl.textContent = `Showing ${shown} of ${allCards.length} posts`;
+					emptyEl.hidden = shown > 0;
+					sessionStorage.setItem(QUERY_KEY, input.value);
+				};
+
+				// Sort by date (newest/oldest) or read time (shortest/longest).
+				// The featured card stays pinned first so the grid keeps
+				// its anchor; everything else sorts around it.
+				const applySort = () => {
+					const mode = sortSelect.value;
+					const byDate = mode === 'newest' || mode === 'oldest';
+					const ascending = mode === 'oldest' || mode === 'shortest';
+					const featured = allCards.find(
+						(card) => card.dataset.featured !== undefined,
+					);
+					const rest = allCards
+						.filter((card) => card !== featured)
+						.sort((a, b) => {
+							const diff = byDate
+								? Date.parse(a.dataset.pubdate!) - Date.parse(b.dataset.pubdate!)
+								: Number(a.dataset.readtime) - Number(b.dataset.readtime);
+							return ascending ? diff : -diff;
+						});
+
+					for (const card of [...(featured ? [featured] : []), ...rest]) {
+						grid.append(card);
+					}
+					sessionStorage.setItem(SORT_KEY, mode);
+				};
+
+				input.addEventListener('input', applyFilter);
+				input.addEventListener('keydown', (event) => {
+					if (event.key === 'Escape') {
+						input.value = '';
+						applyFilter();
+					}
+				});
+				sortSelect.addEventListener('change', applySort);
+
+				// Restore the search text and sort option when navigating
+				// back from a post so the grid feels untouched.
+				const savedQuery = sessionStorage.getItem(QUERY_KEY);
+				const savedSort = sessionStorage.getItem(SORT_KEY);
+				if (savedSort) sortSelect.value = savedSort;
+				if (savedQuery) input.value = savedQuery;
+				if (savedQuery || savedSort) {
+					applySort();
+					applyFilter();
+				}
+
+				// Returning from a post (card click or "All posts"): land
+				// on the scroll position the grid was left at, after any
+				// filtering/sorting above settles the layout first.
+				if (sessionStorage.getItem(RETURN_FLAG) === '1') {
+					sessionStorage.removeItem(RETURN_FLAG);
+					const savedScroll = Number(sessionStorage.getItem(RETURN_SCROLL));
+					if (savedScroll > 0) {
+						window.scrollTo({ top: savedScroll, behavior: 'instant' });
+					}
+				}
 			}
 
-			// Search counts every card (featured banner included)
-			input.addEventListener('input', () => {
-				const query = input.value.trim().toLowerCase();
-				let shown = 0;
-
-				for (const card of allCards) {
-					const match = query === '' || card.dataset.search!.includes(query);
-					card.hidden = !match;
-					if (match) shown++;
-				}
-
-				countEl.textContent = `Showing ${shown} of ${allCards.length} posts`;
-				emptyEl.hidden = shown > 0;
-			});
-
-			input.addEventListener('keydown', (event) => {
-				if (event.key === 'Escape') {
-					input.value = '';
-					input.dispatchEvent(new Event('input'));
-				}
-			});
-
-			// Sort by date (newest/oldest) or read time (shortest/longest).
-			// The featured card stays pinned first so the grid keeps
-			// its anchor; everything else sorts around it.
-			sortSelect.addEventListener('change', () => {
-				const mode = sortSelect.value;
-				const byDate = mode === 'newest' || mode === 'oldest';
-				const ascending = mode === 'oldest' || mode === 'shortest';
-				const featured = getCards().find((card) => card.dataset.featured !== undefined);
-				const rest = getCards()
-					.filter((card) => card !== featured)
-					.sort((a, b) => {
-						const diff = byDate
-							? Date.parse(a.dataset.pubdate!) - Date.parse(b.dataset.pubdate!)
-							: Number(a.dataset.readtime) - Number(b.dataset.readtime);
-						return ascending ? diff : -diff;
-					});
-
-				for (const card of [...(featured ? [featured] : []), ...rest]) {
-					grid.append(card);
-				}
-			});
+			// The router swaps <body> between pages, so re-init on every
+			// navigation; astro:page-load also fires on the initial load.
+			document.addEventListener('astro:page-load', initGrid);
 		</script>
 	</body>
 </html>
