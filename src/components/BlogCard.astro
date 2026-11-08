@@ -1,5 +1,8 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
+	slug: string;
 	title: string;
 	description: string;
 	pubDate: string;
@@ -11,6 +14,7 @@ interface Props {
 }
 
 const {
+	slug,
 	title,
 	description,
 	pubDate,
@@ -31,7 +35,7 @@ const {
 	class={featured ? 'sm:col-span-2 lg:col-span-3 list-none' : ''}
 >
 	<a
-		href="#"
+		href={`/posts/${slug}/`}
 		class={`group grid h-full flex-col border-4 border-ink shadow-[8px_8px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0_0_#000] sm:flex ${
 			featured ? 'sm:grid sm:grid-cols-2 bg-ground' : 'flex bg-white'
 		}`}
@@ -68,15 +72,24 @@ const {
 			)
 		}
 		<div class={`flex flex-1 flex-col gap-3 ${featured ? 'bg-support p-8' : 'p-6'}`}>
-			<p class="flex items-center gap-3 text-[14px] leading-none font-semibold uppercase">
+			<p class="flex items-center gap-2.5 text-[14px] leading-none font-semibold uppercase">
 				{
 					featured && (
-						<span class="bg-ink px-2 py-1 text-white">Featured</span>
+						<span class="flex items-center gap-1.5 bg-ink px-2 py-1 text-white">
+							<Icon name="lucide:star" size={13} />
+							Featured
+						</span>
 					)
 				}
-				<time>{pubDate}</time>
+				<span class="flex items-center gap-1.5">
+					<Icon name="lucide:calendar" size={14} />
+					<time>{pubDate}</time>
+				</span>
 				<span aria-hidden="true">·</span>
-				<span>{readTime} min read</span>
+				<span class="flex items-center gap-1.5">
+					<Icon name="lucide:clock" size={14} />
+					{readTime} min read
+				</span>
 			</p>
 			<h3
 				class={`${featured ? 'text-4xl' : 'text-2xl min-h-[60px] line-clamp-2'} leading-tight font-extrabold tracking-tighter`}
@@ -90,8 +103,9 @@ const {
 			</p>
 			{
 				featured ? (
-					<span class="mt-auto self-start border-4 border-ink bg-accent px-6 py-3.5 text-[15px] leading-none font-bold text-white uppercase [--tw-shadow:6px_6px_0_0_#000] shadow-(--tw-shadow) group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-(--tw-shadow) group-active:shadow-none">
-						Read the post →
+					<span class="mt-auto flex items-center justify-center gap-2 self-start border-4 border-ink bg-accent px-6 py-3.5 text-[15px] leading-none font-bold text-white uppercase [--tw-shadow:6px_6px_0_0_#000] shadow-(--tw-shadow) group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-(--tw-shadow) group-active:shadow-none">
+						Read the post
+						<Icon name="lucide:arrow-right" size={16} />
 					</span>
 				) : null
 			}
@@ -99,7 +113,8 @@ const {
 				tags.length > 0 && (
 					<ul class={`flex flex-wrap gap-2 ${featured ? 'pt-2' : 'mt-auto pt-2'}`}>
 						{tags.map((tag) => (
-							<li class="border-2 border-ink bg-white px-2 py-0.5 text-[14px] leading-none font-semibold uppercase">
+							<li class="flex items-center gap-1 border-2 border-ink bg-white px-2 py-0.5 text-[14px] leading-none font-semibold uppercase">
+								<Icon name="lucide:tag" size={12} />
 								{tag}
 							</li>
 						))}

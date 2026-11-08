@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { SITE } from '../lib/posts';
 
 const year = new Date().getFullYear();
@@ -10,7 +11,14 @@ const year = new Date().getFullYear();
 	>
 		<div>
 			<p class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase">
-				<span aria-hidden="true" class="block size-4 bg-support"></span>
+				<span
+					aria-hidden="true"
+					class="flex items-center gap-1"
+				>
+					<span class="relative block size-4 bg-white [clip-path:polygon(50%_0,100%_100%,0_100%)]"><span class="absolute inset-[2px] bg-accent [clip-path:polygon(50%_0,100%_100%,0_100%)]"></span></span>
+					<span class="block size-4 border-2 border-white bg-field"></span>
+					<span class="block size-4 rounded-full border-2 border-white bg-support"></span>
+				</span>
 				{SITE.name}
 			</p>
 			<p class="mt-4 max-w-sm text-[17px] font-normal text-white/80 leading-relaxed">
@@ -19,8 +27,15 @@ const year = new Date().getFullYear();
 		</div>
 		<nav aria-label="Footer" class="sm:justify-self-end">
 			<ul class="flex flex-col gap-3 text-[15px] font-semibold uppercase">
-				<li><a class="hover:underline underline-offset-4" href="#posts">All posts</a></li>
-				<li><a class="hover:underline underline-offset-4" href="#top">Back to top</a></li>
+				<li>
+					<a
+						href="/#posts"
+						class="flex items-center gap-2 hover:underline underline-offset-4"
+					>
+						<Icon name="lucide:archive" size={15} />
+						All posts
+					</a>
+				</li>
 			</ul>
 		</nav>
 	</div>
@@ -29,7 +44,7 @@ const year = new Date().getFullYear();
 			class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-gutter py-4 text-[14px] text-white/60"
 		>
 			<p>&copy; {year} {SITE.name}</p>
-			<p>Set in Host Grotesk. Built with Astro.</p>
+			<p>Set in Google Sans. Built with Astro.</p>
 		</div>
 	</div>
 </footer>

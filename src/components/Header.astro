@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { SITE } from '../lib/posts';
 ---
 
@@ -10,7 +11,15 @@ import { SITE } from '../lib/posts';
 			href="#top"
 			class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase"
 		>
-			<span aria-hidden="true" class="block size-4 bg-accent"></span>
+			<!-- Logo mark: triangle · square · circle in the theme colors -->
+			<span
+				aria-hidden="true"
+				class="flex items-center gap-1"
+			>
+				<span class="relative block size-4 bg-ink [clip-path:polygon(50%_0,100%_100%,0_100%)]"><span class="absolute inset-[2px] bg-accent [clip-path:polygon(50%_0,100%_100%,0_100%)]"></span></span>
+				<span class="block size-4 border-2 border-ink bg-field"></span>
+				<span class="block size-4 rounded-full border-2 border-ink bg-support"></span>
+			</span>
 			{SITE.name}
 		</a>
 		<nav aria-label="Main">
@@ -20,16 +29,20 @@ import { SITE } from '../lib/posts';
 				<li>
 					<a
 						href="#posts"
-						class="hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
-						>Posts</a
+						class="flex items-center gap-1.5 hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
 					>
+						<Icon name="lucide:newspaper" size={15} />
+						Posts
+					</a>
 				</li>
 				<li>
 					<a
 						href="#about"
-						class="hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
-						>About</a
+						class="flex items-center gap-1.5 hover:underline hover:decoration-accent hover:decoration-4 underline-offset-4"
 					>
+						<Icon name="lucide:info" size={15} />
+						About
+					</a>
 				</li>
 			</ul>
 		</nav>

@@ -1,8 +1,10 @@
 ---
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { SITE, formatDate } from '../lib/posts';
 
@@ -24,12 +26,6 @@ const totalPosts = posts.length;
 		<title>{SITE.name} — {SITE.tagline}</title>
 		<meta name="description" content={SITE.description} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			rel="stylesheet"
-			href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap"
-		/>
 	</head>
 	<body class="min-h-screen bg-ground font-display text-ink">
 		<Header />
@@ -48,9 +44,9 @@ const totalPosts = posts.length;
 						<div class="flex w-full border-4 border-ink bg-white shadow-[8px_8px_0_0_#000]">
 							<span
 								aria-hidden="true"
-								class="grid w-14 shrink-0 place-items-center border-r-4 border-ink bg-accent text-xl text-white"
+								class="grid w-14 shrink-0 place-items-center border-r-4 border-ink bg-accent text-white"
 							>
-								Q
+								<Icon name="lucide:search" size={20} />
 							</span>
 							<input
 								id="blog-search"
@@ -68,15 +64,23 @@ const totalPosts = posts.length;
 						>
 							Sort
 						</label>
-						<select
-							id="post-sort"
-							class="w-full cursor-pointer appearance-none border-4 border-ink bg-field px-6 py-4 text-[15px] font-bold text-on-field uppercase shadow-[8px_8px_0_0_#000] lg:w-auto"
-						>
-							<option value="newest">Newest ↓</option>
-							<option value="oldest">Oldest ↑</option>
-							<option value="shortest">Shortest ↑</option>
-							<option value="longest">Longest ↓</option>
-						</select>
+						<div class="relative w-full lg:w-auto">
+							<select
+								id="post-sort"
+								class="w-full cursor-pointer appearance-none border-4 border-ink bg-field py-4 pr-12 pl-6 text-[15px] font-bold text-on-field uppercase shadow-[8px_8px_0_0_#000]"
+							>
+								<option value="newest">Newest</option>
+								<option value="oldest">Oldest</option>
+								<option value="shortest">Shortest</option>
+								<option value="longest">Longest</option>
+							</select>
+							<Icon
+								name="lucide:chevrons-up-down"
+								size={18}
+								aria-hidden="true"
+								class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-on-field"
+							/>
+						</div>
 					</div>
 				</form>
 				<p
@@ -98,6 +102,7 @@ const totalPosts = posts.length;
 						{
 							featuredPost && (
 								<BlogCard
+									slug={featuredPost.id}
 									title={featuredPost.data.title}
 									description={featuredPost.data.description}
 									pubDate={formatDate(featuredPost.data.pubDate)}
@@ -112,6 +117,7 @@ const totalPosts = posts.length;
 						{
 							otherPosts.map((post) => (
 								<BlogCard
+									slug={post.id}
 									title={post.data.title}
 									description={post.data.description}
 									pubDate={formatDate(post.data.pubDate)}
@@ -135,6 +141,7 @@ const totalPosts = posts.length;
 		</main>
 
 		<Footer />
+		<BackToTop />
 
 		<script>
 			const input = document.getElementById('blog-search') as HTMLInputElement;

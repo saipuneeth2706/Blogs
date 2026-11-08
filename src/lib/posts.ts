@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 
 export const SITE = {
-	name: 'The Blog',
+	name: 'Blogs',
 	tagline: 'Bold ideas, readable fast.',
 	description:
 		'The Blog — a Bauhaus-flavored home for essays, notes, guides and ideas.',

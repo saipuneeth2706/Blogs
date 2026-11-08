@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* ─── Google Sans (self-hosted, variable) ──────────────────────────
+   One file per style covers every weight 400–700 via the wght axis. */
+@font-face {
+	font-family: "Google Sans";
+	src: url("/fonts/GoogleSans-Variable.ttf") format("truetype-variations");
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Google Sans";
+	src: url("/fonts/GoogleSans-Italic-Variable.ttf") format("truetype-variations");
+	font-weight: 400 700;
+	font-style: italic;
+	font-display: swap;
+}
+
 @theme {
 	/* Bauhaus tokens */
 	--color-ground: #f5f4ee;
@@ -10,7 +28,7 @@
 	--color-quiet: #e8e8e8;
 	--color-on-field: #ffffff;
 
-	--font-display: "Host Grotesk", sans-serif;
+	--font-display: "Google Sans", sans-serif;
 
 	--spacing-gutter: clamp(22px, 4.45vw, 72px);
 }
@@ -19,14 +37,138 @@ html {
 	scroll-behavior: smooth;
 }
 
+/* ─── Reading page article typography ─────────────────────────────
+   Calm Bauhaus: off-white/black base, red only as a quiet accent.  */
 body {
 	font-family: var(--font-display);
 }
+
+.prose-bauhaus {
+	font-size: 17px;
+	line-height: 1.7;
+	font-weight: 450;
+}
+
+.prose-bauhaus > * + * {
+	margin-top: 1.4em;
+}
+
+.prose-bauhaus h2 {
+	margin-top: 2.2em;
+	padding-bottom: 0.3em;
+	border-bottom: 3px solid var(--color-ink);
+	font-size: 27px;
+	line-height: 1.2;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+.prose-bauhaus h3 {
+	margin-top: 1.9em;
+	font-size: 21px;
+	line-height: 1.25;
+	font-weight: 750;
+}
+
+.prose-bauhaus h4 {
+	margin-top: 1.6em;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.prose-bauhaus a {
+	font-weight: 600;
+	text-decoration: underline;
+	text-decoration-color: var(--color-accent);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 3px;
+}
+
+.prose-bauhaus a:hover {
+	background: var(--color-support);
+}
+
+.prose-bauhaus img {
+	max-width: 100%;
+	height: auto;
+	border: 4px solid var(--color-ink);
+}
+
+.prose-bauhaus code {
+	font-family: monospace;
+	font-size: 0.88em;
+}
+
+.prose-bauhaus :not(pre) > code {
+	background: var(--color-quiet);
+	padding: 0.1em 0.35em;
+	font-weight: 600;
+}
+
+.prose-bauhaus pre {
+	background: var(--color-ink);
+	color: #fff;
+	border: 4px solid var(--color-ink);
+	padding: 16px 20px;
+	max-width: 100%;
+	overflow-x: auto;
+	font-size: 14.5px;
+	line-height: 1.6;
+}
+
+.prose-bauhaus pre code {
+	background: none;
+	font-weight: 400;
+}
+
+.prose-bauhaus blockquote {
+	border-left: 4px solid var(--color-accent);
+	padding-left: 1.2em;
+}
+
+.prose-bauhaus blockquote p {
+	margin: 0;
+}
+
+.prose-bauhaus table {
+	width: 100%;
+	border: 3px solid var(--color-ink);
+	border-collapse: collapse;
+}
+
+.prose-bauhaus th,
+.prose-bauhaus td {
+	border: 2px solid var(--color-ink);
+	padding: 6px 12px;
+	text-align: left;
+}
+
+.prose-bauhaus th {
+	background: var(--color-quiet);
+	font-weight: 650;
+}
+
+.prose-bauhaus hr {
+	border: none;
+	border-top: 3px solid var(--color-ink);
+	margin: 2.6em 0;
+}
+
+.prose-bauhaus li {
+	margin: 0.35em 0;
+}
+
 
 /* Clear keyboard focus on every control */
 :where(a, button, input):focus-visible {
 	outline: 3px solid var(--color-field);
 	outline-offset: 2px;
+}
+
+/* Lucide inline icons: heavier strokes to sit beside the black seams */
+svg.astro-icon {
+	stroke-width: 2.5px;
+	vertical-align: -0.12em;
 }
 
 @media (prefers-reduced-motion: reduce) {
