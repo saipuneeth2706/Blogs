@@ -1,0 +1,105 @@
+---
+// Column 3 on the reading page: posts related to `post` by shared
+// tags. Scoring: shared-tag count first, recency as the tiebreak,
+// then most-recent posts that share no tags — capped at 4.
+// Each card shares its target's transition name so clicking one
+// morphs it into the next article.
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../lib/posts';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+
+const all = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const scored = all
+	.filter((p) => p.id !== post.id)
+	.map((p) => ({
+		post: p,
+		score: p.data.tags.filter((t) => post.data.tags.includes(t)).length,
+	}))
+	.sort(
+		(a, b) =>
+			b.score - a.score ||
+			b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf(),
+	);
+const related = scored.slice(0, 4);
+---
+
+<aside
+	aria-label="Related posts"
+	class="self-start md:mt-8 lg:sticky lg:top-8"
+>
+	<h2
+		class="flex items-center gap-2.5 border-4 border-ink bg-ink px-4 py-2.5 text-xl font-extrabold tracking-tighter text-white uppercase"
+	>
+		<Icon name="lucide:layers" size={18} />
+		Related posts
+	</h2>
+	<ul class="mt-6 flex flex-col gap-6">
+		{
+			related.map(({ post: relatedPost, score }) => (
+				<li>
+					<a
+						href={`/posts/${relatedPost.id}/`}
+						transition:name={`post-${relatedPost.id}`}
+						style="view-transition-class: post-panel"
+						class="group flex flex-col gap-2 border-4 border-ink bg-white p-5 shadow-[6px_6px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0_0_#000]"
+					>
+						<p class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] leading-none font-semibold uppercase">
+							<span class="flex items-center gap-1.5">
+								<Icon name="lucide:calendar" size={13} />
+								<time
+									datetime={relatedPost.data.pubDate
+										.toISOString()
+										.slice(0, 10)}
+								>
+									{formatDate(relatedPost.data.pubDate)}
+								</time>
+							</span>
+							<span aria-hidden="true">·</span>
+							<span class="flex items-center gap-1.5">
+								<Icon name="lucide:clock" size={13} />
+								{relatedPost.data.readTime} min read
+							</span>
+						</p>
+						<h3 class="flex items-start justify-between gap-3 text-lg leading-tight font-bold tracking-tight">
+							{relatedPost.data.title}
+							<Icon
+								name="lucide:arrow-up-right"
+								size={16}
+								class="mt-0.5 shrink-0 opacity-40 transition-opacity group-hover:opacity-100"
+							/>
+						</h3>
+						<p class="text-[15px] leading-snug font-normal line-clamp-2">
+							{relatedPost.data.description}
+						</p>
+						<p class="mt-1 flex flex-wrap gap-2">
+							{
+								score > 0 && (
+									<span class="flex items-center gap-1.5 border-2 border-ink bg-accent px-2 py-0.5 text-[13px] leading-none font-semibold text-white uppercase">
+										<Icon name="lucide:tags" size={12} />
+										{score} shared{' '}
+										{score === 1 ? 'tag' : 'tags'}
+									</span>
+								)
+							}
+							{relatedPost.data.tags.map((tag) => (
+								<span class="flex items-center gap-1 border-2 border-ink px-2 py-0.5 text-[13px] leading-none font-semibold uppercase">
+									<Icon name="lucide:tag" size={12} />
+									{tag}
+								</span>
+							))}
+						</p>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</aside>

@@ -1,0 +1,31 @@
+---
+// Live search column: label + bordered input with the red icon block.
+// The <form role="search"> wrapper that positions both controls lives
+// in index.astro; the counting/filtering script references #blog-search.
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="w-full lg:flex-1">
+	<label
+		for="blog-search"
+		class="mb-2 block text-[15px] leading-none font-semibold uppercase"
+	>
+		Search posts
+	</label>
+	<div class="flex w-full border-4 border-ink bg-white shadow-[8px_8px_0_0_#000]">
+		<span
+			aria-hidden="true"
+			class="grid w-14 shrink-0 place-items-center border-r-4 border-ink bg-accent text-white"
+		>
+			<Icon name="lucide:search" size={20} />
+		</span>
+		<input
+			id="blog-search"
+			type="search"
+			placeholder="Title, description or tag…"
+			autocomplete="off"
+			class="w-full bg-transparent px-5 py-4 text-[19px] placeholder:text-ink/40 focus-visible:outline-none"
+		/>
+	</div>
+</div>
+

@@ -1,0 +1,33 @@
+---
+// Sort column: blue select over the newest/oldest/shortest/longest
+// options, with the chevron overlaying the hidden native arrow.
+// Lives beside PostSearch inside index.astro's role="search" form;
+// the grid ordering script references #post-sort.
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="w-full lg:w-auto">
+	<label
+		for="post-sort"
+		class="mb-2 block text-[15px] leading-none font-semibold uppercase"
+	>
+		Sort
+	</label>
+	<div class="relative w-full lg:w-auto">
+		<select
+			id="post-sort"
+			class="w-full cursor-pointer appearance-none border-4 border-ink bg-field py-4 pr-12 pl-6 text-[15px] font-bold text-on-field uppercase shadow-[8px_8px_0_0_#000]"
+		>
+			<option value="newest">Newest</option>
+			<option value="oldest">Oldest</option>
+			<option value="shortest">Shortest</option>
+			<option value="longest">Longest</option>
+		</select>
+		<Icon
+			name="lucide:chevrons-up-down"
+			size={18}
+			aria-hidden="true"
+			class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-on-field"
+		/>
+	</div>
+</div>

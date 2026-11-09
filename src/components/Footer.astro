@@ -10,7 +10,10 @@ const year = new Date().getFullYear();
 		class="mx-auto grid max-w-[1200px] gap-10 px-gutter py-14 sm:grid-cols-2 lg:gap-6"
 	>
 		<div>
-			<p class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase">
+			<a
+				href="/"
+				class="flex items-center gap-3 text-lg leading-none font-extrabold tracking-tighter uppercase w-fit hover:underline underline-offset-4"
+			>
 				<span
 					aria-hidden="true"
 					class="flex items-center gap-1"
@@ -20,7 +23,7 @@ const year = new Date().getFullYear();
 					<span class="block size-4 rounded-full border-2 border-white bg-support"></span>
 				</span>
 				{SITE.name}
-			</p>
+			</a>
 			<p class="mt-4 max-w-sm text-[17px] font-normal text-white/80 leading-relaxed">
 				{SITE.tagline} Essays, notes and guides — written to be read.
 			</p>

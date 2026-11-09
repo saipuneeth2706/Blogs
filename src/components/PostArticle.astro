@@ -1,0 +1,84 @@
+---
+// Reading-page article column: back link, hero, title, meta, tags and
+// the post body (passed through the slot). Carries the transition name
+// shared with the home card, so the card morphs into this article.
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/posts';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+interface Slots {
+	default: string;
+}
+
+const { post } = Astro.props;
+---
+
+<article
+	transition:name={`post-${post.id}`}
+	style="view-transition-class: post-panel"
+	class="min-w-0 md:col-span-2"
+>
+	<a
+		href="/"
+		class="inline-flex items-center gap-2 border-4 border-ink bg-white px-4 py-2 text-[15px] leading-none font-semibold uppercase hover:translate-x-[2px] hover:translate-y-[2px]"
+	>
+		<Icon name="lucide:arrow-left" size={16} />
+		All posts
+	</a>
+
+	{
+		post.data.heroImage && (
+			<img
+				src={post.data.heroImage}
+				alt={`Cover image for “${post.data.title}”`}
+				class="mt-8 aspect-16/9 w-full border-4 border-ink object-cover shadow-[8px_8px_0_0_#000]"
+			/>
+		)
+	}
+
+	<h1 class="mt-8 text-4xl leading-[1.05] font-extrabold tracking-tighter sm:text-5xl">
+		{post.data.title}
+	</h1>
+
+	<p class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-[14px] leading-none font-semibold uppercase">
+		<span class="flex items-center gap-1.5">
+			<Icon name="lucide:calendar" size={14} />
+			<time datetime={post.data.pubDate.toISOString().slice(0, 10)}
+				>{formatDate(post.data.pubDate)}</time
+			>
+		</span>
+		<span aria-hidden="true">·</span>
+		<span class="flex items-center gap-1.5">
+			<Icon name="lucide:clock" size={14} />
+			{post.data.readTime} min read
+		</span>
+	</p>
+
+	{
+		post.data.tags.length > 0 && (
+			<ul class="mt-4 flex flex-wrap gap-2">
+				{post.data.tags.map((tag) => (
+					<li class="flex items-center gap-1.5 border-2 border-ink bg-white px-2 py-1 text-[14px] leading-none font-semibold uppercase">
+						<Icon name="lucide:tag" size={13} />
+						{tag}
+					</li>
+				))}
+			</ul>
+		)
+	}
+
+	<div class="prose-bauhaus mt-10 max-w-[68ch]">
+		<slot />
+	</div>
+	<a
+		href="/"
+		class="mt-14 inline-flex items-center gap-2 border-4 border-ink bg-white px-4 py-2 text-[15px] leading-none font-semibold uppercase hover:translate-x-[2px] hover:translate-y-[2px]"
+	>
+		<Icon name="lucide:arrow-left" size={16} />
+		All posts
+	</a>
+</article>

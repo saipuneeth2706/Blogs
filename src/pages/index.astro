@@ -2,11 +2,12 @@
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import { ClientRouter } from 'astro:transitions';
-import { Icon } from 'astro-icon/components';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import BlogCard from '../components/BlogCard.astro';
+import PostSearch from '../components/PostSearch.astro';
+import PostSort from '../components/PostSort.astro';
 import { SITE, formatDate } from '../lib/posts';
 
 const posts = (await getCollection('blog')).sort(
@@ -26,7 +27,7 @@ const totalPosts = posts.length;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>{SITE.name} — {SITE.tagline}</title>
 		<meta name="description" content={SITE.description} />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<ClientRouter />
 	</head>
 	<body class="min-h-screen bg-ground font-display text-ink">
@@ -36,54 +37,8 @@ const totalPosts = posts.length;
 			<!-- Search-first band: the page opens straight into the posts -->
 			<section id="posts" aria-label="Search blog posts" class="mx-auto max-w-[1200px] px-gutter pt-10">
 				<form role="search" class="flex w-full flex-col gap-4 lg:flex-row lg:items-end">
-					<div class="w-full lg:flex-1">
-						<label
-							for="blog-search"
-							class="mb-2 block text-[15px] leading-none font-semibold uppercase"
-						>
-							Search posts
-						</label>
-						<div class="flex w-full border-4 border-ink bg-white shadow-[8px_8px_0_0_#000]">
-							<span
-								aria-hidden="true"
-								class="grid w-14 shrink-0 place-items-center border-r-4 border-ink bg-accent text-white"
-							>
-								<Icon name="lucide:search" size={20} />
-							</span>
-							<input
-								id="blog-search"
-								type="search"
-								placeholder="Title, description or tag…"
-								autocomplete="off"
-								class="w-full bg-transparent px-5 py-4 text-[19px] placeholder:text-ink/40 focus-visible:outline-none"
-							/>
-						</div>
-					</div>
-					<div class="w-full lg:w-auto">
-						<label
-							for="post-sort"
-							class="mb-2 block text-[15px] leading-none font-semibold uppercase"
-						>
-							Sort
-						</label>
-						<div class="relative w-full lg:w-auto">
-							<select
-								id="post-sort"
-								class="w-full cursor-pointer appearance-none border-4 border-ink bg-field py-4 pr-12 pl-6 text-[15px] font-bold text-on-field uppercase shadow-[8px_8px_0_0_#000]"
-							>
-								<option value="newest">Newest</option>
-								<option value="oldest">Oldest</option>
-								<option value="shortest">Shortest</option>
-								<option value="longest">Longest</option>
-							</select>
-							<Icon
-								name="lucide:chevrons-up-down"
-								size={18}
-								aria-hidden="true"
-								class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-on-field"
-							/>
-						</div>
-					</div>
+					<PostSearch />
+					<PostSort />
 				</form>
 				<p
 					id="search-count"

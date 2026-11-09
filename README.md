@@ -39,6 +39,10 @@ npm run preview  # preview the production build
 │   │   ├── Header.astro        # Logo + site nav
 │   │   ├── Footer.astro        # About footer with inverted logo
 │   │   ├── BlogCard.astro      # Grid card (also used for the featured banner)
+│   │   ├── PostSearch.astro    # Search input column inside the home form
+│   │   ├── PostSort.astro      # Sort select column inside the home form
+│   │   ├── PostArticle.astro   # Reading-page article (title, meta, body slot)
+│   │   ├── RelatedPosts.astro  # Tag-scored suggestion sidebar
 │   │   └── BackToTop.astro     # Floating slide-in back-to-top button
 │   ├── lib/posts.ts            # SITE name/tagline, date formatting helpers
 │   ├── pages/
