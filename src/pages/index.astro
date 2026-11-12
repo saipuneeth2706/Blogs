@@ -30,71 +30,98 @@ const totalPosts = posts.length;
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<ClientRouter />
 	</head>
-	<body class="min-h-screen bg-ground font-display text-ink">
+	<body class="flex min-h-screen flex-col bg-ground font-display text-ink">
 		<Header />
 
-		<main>
-			<!-- Search-first band: the page opens straight into the posts -->
-			<section id="posts" aria-label="Search blog posts" class="mx-auto max-w-[1200px] px-gutter pt-10">
-				<form role="search" class="flex w-full flex-col gap-4 lg:flex-row lg:items-end">
-					<PostSearch />
-					<PostSort />
-				</form>
-				<p
-					id="search-count"
-					aria-live="polite"
-					class="mt-3 text-[14px] font-semibold uppercase"
-				>
-					Showing {totalPosts} of {totalPosts} posts
-				</p>
-			</section>
+		<main class="flex flex-1 flex-col">
+			{
+				posts.length === 0 ? (
+					// Nothing published yet: centered placeholder
+					<section
+						aria-label="No posts yet"
+						class="flex flex-1 items-center justify-center px-gutter py-24"
+					>
+						<div class="text-center">
+							<p
+								aria-hidden="true"
+								class="flex items-center justify-center gap-1"
+							>
+								<span class="relative block size-4 bg-ink [clip-path:polygon(50%_0,100%_100%,0_100%)]"><span class="absolute inset-[2px] bg-accent [clip-path:polygon(50%_0,100%_100%,0_100%)]"></span></span>
+								<span class="block size-4 border-2 border-ink bg-field"></span>
+								<span class="block size-4 rounded-full border-2 border-ink bg-support"></span>
+							</p>
+							<h1 class="mt-6 text-4xl font-extrabold tracking-tighter uppercase sm:text-5xl">
+								Check back later
+							</h1>
+							<p class="mt-3 text-[17px] font-normal text-ink/70">
+								No posts have been published yet.
+							</p>
+						</div>
+					</section>
+				) : (
+					<>
+						<section id="posts" aria-label="Search blog posts" class="mx-auto max-w-[1200px] px-gutter pt-10">
+							<form role="search" class="flex w-full flex-col gap-4 lg:flex-row lg:items-end">
+								<PostSearch />
+								<PostSort />
+							</form>
+							<p
+								id="search-count"
+								aria-live="polite"
+								class="mt-3 text-[14px] font-semibold uppercase"
+							>
+								Showing {totalPosts} of {totalPosts} posts
+							</p>
+						</section>
 
-			<!-- Grid: featured as the full-width anchor row, the rest beside it -->
-			<section aria-label="All posts" class="px-gutter pt-12 pb-16">
-				<div class="mx-auto max-w-[1200px]">
-					<ul
-						id="post-grid"
-						class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
-					>
-						{
-							featuredPost && (
-								<BlogCard
-									slug={featuredPost.id}
-									title={featuredPost.data.title}
-									description={featuredPost.data.description}
-									pubDate={formatDate(featuredPost.data.pubDate)}
-									sortDate={featuredPost.data.pubDate.toISOString()}
-									readTime={featuredPost.data.readTime}
-									heroImage={featuredPost.data.heroImage}
-									tags={featuredPost.data.tags}
-									featured
-								/>
-							)
-						}
-						{
-							otherPosts.map((post) => (
-								<BlogCard
-									slug={post.id}
-									title={post.data.title}
-									description={post.data.description}
-									pubDate={formatDate(post.data.pubDate)}
-									sortDate={post.data.pubDate.toISOString()}
-									readTime={post.data.readTime}
-									heroImage={post.data.heroImage}
-									tags={post.data.tags}
-								/>
-							)
-						)}
-					</ul>
-					<p
-						id="search-empty"
-						hidden
-						class="mt-10 border-4 border-ink bg-accent px-6 py-8 text-center text-2xl font-extrabold tracking-tighter text-white uppercase"
-					>
-						No posts match your search.
-					</p>
-				</div>
-			</section>
+						<section aria-label="All posts" class="px-gutter pt-12 pb-16">
+							<div class="mx-auto max-w-[1200px]">
+								<ul
+									id="post-grid"
+									class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+								>
+									{
+										featuredPost && (
+											<BlogCard
+												slug={featuredPost.id}
+												title={featuredPost.data.title}
+												description={featuredPost.data.description}
+												pubDate={formatDate(featuredPost.data.pubDate)}
+												sortDate={featuredPost.data.pubDate.toISOString()}
+												readTime={featuredPost.data.readTime}
+												heroImage={featuredPost.data.heroImage}
+												tags={featuredPost.data.tags}
+												featured
+											/>
+										)
+									}
+									{
+										otherPosts.map((post) => (
+											<BlogCard
+												slug={post.id}
+												title={post.data.title}
+												description={post.data.description}
+												pubDate={formatDate(post.data.pubDate)}
+												sortDate={post.data.pubDate.toISOString()}
+												readTime={post.data.readTime}
+												heroImage={post.data.heroImage}
+												tags={post.data.tags}
+											/>
+										)
+									)}
+								</ul>
+								<p
+									id="search-empty"
+									hidden
+									class="mt-10 border-4 border-ink bg-accent px-6 py-8 text-center text-2xl font-extrabold tracking-tighter text-white uppercase"
+								>
+									No posts match your search.
+								</p>
+							</div>
+						</section>
+					</>
+				)
+			}
 		</main>
 
 		<Footer />
