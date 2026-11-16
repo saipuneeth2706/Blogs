@@ -144,6 +144,8 @@ I created this website as a place to share things I learn, projects I work on, i
 
 I don't want this to be just another portfolio website that exists to list a bunch of technologies and projects.
 
+If you're interested in following along, you can subscribe to my newsletter using the email box on the newsletter page. I'll share updates whenever there's something new on the blog, whether it's about Linux, technology, interesting experiments, or upcoming projects.
+
 I'd rather make it a place where I can document my journey, share my experiences, and hopefully help someone else along the way.
 
 I have a lot to learn, a lot to build, and probably a lot of things to break before figuring them out.
