@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { Font } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
@@ -28,6 +29,7 @@ const totalPosts = posts.length;
 		<title>{SITE.name} — {SITE.tagline}</title>
 		<meta name="description" content={SITE.description} />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<Font cssVariable="--font-google-sans" preload={[{ style: 'normal' }]} />
 		<ClientRouter />
 	</head>
 	<body class="flex min-h-screen flex-col bg-ground font-display text-ink">

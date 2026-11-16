@@ -31,9 +31,9 @@ npm run preview  # preview the production build
 
 ```text
 /
-├── public/
-│   └── fonts/                  # Self-hosted Google Sans (variable, 400–700 + italics)
 ├── src/
+│   ├── assets/fonts/             # Self-hosted Google Sans (variable, 400–700 + italics)
+│   ├── assets/images/            # Post hero images (processed by <Image />)
 │   ├── blogs/                  # Blog posts — plain .md files with frontmatter
 │   ├── components/
 │   │   ├── Header.astro        # Logo + site nav
@@ -48,9 +48,9 @@ npm run preview  # preview the production build
 │   ├── pages/
 │   │   ├── index.astro         # Home: search band + featured anchor + grid
 │   │   └── posts/[slug].astro  # Reading page + related-post logic
-│   ├── styles/global.css       # Bauhaus tokens, font-face, prose styles
+│   ├── styles/global.css       # Bauhaus tokens, prose styles
 │   └── content.config.ts       # Zod schema for post frontmatter
-├── astro.config.mjs            # astro-icon (lucide) + Tailwind vite plugin
+├── astro.config.mjs            # astro-icon (lucide), Astro Fonts API, Tailwind vite plugin
 └── package.json
 ```
 
@@ -63,7 +63,7 @@ Add a Markdown file to `src/blogs/`:
 title: How I Built This
 description: One-sentence summary used in cards, meta and search.
 pubDate: 2026-03-01
-heroImage: https://picsum.photos/seed/anything/1200/800
+heroImage: ../assets/images/my-hero.webp   # optional, relative to this .md file
 tags: [Process, Notes]
 featured: false        # at most one post should be featured
 readTime: 2            # minutes, ~200 words per minute
@@ -83,6 +83,6 @@ Only `featured` is templated into the layout; the frontmatter fields are validat
 | `bg-accent` | `#ff0000` red | Primary accents, search icon block |
 | `bg-field` | `#0000ff` blue | Sort select, triangle logo |
 | `bg-support` | `#ffff00` yellow | Featured panel, circle logo |
-| `--font-display` | Google Sans | Everything (self-hosted in `public/fonts/`) |
+| `--font-display` | Google Sans | Everything (self-hosted in `src/assets/fonts/`, loaded via the Astro Fonts API) |
 
 Icons come from [astro-icon](https://github.com/natemoo-re/astro-icon) with the Lucide set, inlined at build time with 2.5px strokes (`svg.astro-icon` rule in `global.css`).

@@ -1,5 +1,6 @@
 ---
 import '../../styles/global.css';
+import { Font } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../../components/Header.astro';
@@ -25,6 +26,7 @@ const { Content } = await render(post);
 		<title>{post.data.title} — {SITE.name}</title>
 		<meta name="description" content={post.data.description} />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<Font cssVariable="--font-google-sans" preload={[{ style: 'normal' }]} />
 		<ClientRouter />
 	</head>
 	<body class="min-h-screen bg-ground font-display text-ink">

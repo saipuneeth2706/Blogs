@@ -1,21 +1,9 @@
 @import "tailwindcss";
 
-/* ─── Google Sans (self-hosted, variable) ──────────────────────────
-   One file per style covers every weight 400–700 via the wght axis. */
-@font-face {
-	font-family: "Google Sans";
-	src: url("/fonts/GoogleSans-Variable.ttf") format("truetype-variations");
-	font-weight: 400 700;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "Google Sans";
-	src: url("/fonts/GoogleSans-Italic-Variable.ttf") format("truetype-variations");
-	font-weight: 400 700;
-	font-style: italic;
-	font-display: swap;
+/* Google Sans is loaded through the Astro Fonts API (astro.config.mjs),
+   which injects the @font-face rules and the --font-google-sans variable. */
+@theme inline {
+	--font-display: var(--font-google-sans);
 }
 
 @theme {
@@ -28,8 +16,6 @@
 	--color-quiet: #e8e8e8;
 	--color-on-field: #ffffff;
 
-	--font-display: "Google Sans", sans-serif;
-
 	--spacing-gutter: clamp(22px, 4.45vw, 72px);
 }
 
@@ -40,7 +26,7 @@ html {
 /* ─── Reading page article typography ─────────────────────────────
    Calm Bauhaus: off-white/black base, red only as a quiet accent.  */
 body {
-	font-family: var(--font-display);
+	font-family: var(--font-google-sans);
 }
 
 .prose-bauhaus {
