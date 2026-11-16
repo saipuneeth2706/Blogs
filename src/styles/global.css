@@ -157,22 +157,69 @@ svg.astro-icon {
 	vertical-align: -0.12em;
 }
 
-/* Page transitions (ClientRouter / View Transitions API):
-   the named .post-panel pair morphs grid card <-> article panel
-   while the rest of the page crossfades briskly. */
+/* Page transitions (ClientRouter / View Transitions API), zoom-style:
+   the named .post-panel pair zooms card <-> article with a long eased
+   curve while the rest of the page crossfades briskly. The card
+   dissolves over the first half of the zoom and the article resolves
+   over the second half, so the stretching snapshots are never fully
+   opaque mid-flight. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation-duration: 140ms;
 }
 
 ::view-transition-group(.post-panel) {
-	animation-duration: 300ms;
-	animation-timing-function: cubic-bezier(0.22, 0.85, 0.2, 1);
+	animation-duration: 0.4s;
+	animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
+	overflow: hidden;
 }
 
-::view-transition-old(.post-panel),
+::view-transition-old(.post-panel) {
+	animation: vt-fade-out 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+	mix-blend-mode: normal;
+}
+
 ::view-transition-new(.post-panel) {
-	animation-duration: 220ms;
+	animation: vt-fade-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) 0.18s both;
+	mix-blend-mode: normal;
+}
+
+/* Cards that don't take part in the morph (the grid siblings when a
+   post opens) leave quickly instead of lingering for the full zoom. */
+::view-transition-old(.post-panel):only-child {
+	animation: vt-fade-out 0.15s ease both;
+}
+
+::view-transition-new(.post-panel):only-child {
+	animation: vt-fade-in 0.2s ease both;
+}
+
+/* Article title: rises up into place behind its own clip mask, like a
+   caption sliding out of the panel, after the zoom has settled. */
+::view-transition-group(title) {
+	overflow: clip;
+}
+
+::view-transition-new(title) {
+	animation: vt-rise 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
+}
+
+@keyframes vt-fade-out {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes vt-fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes vt-rise {
+	from {
+		transform: translateY(105%);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

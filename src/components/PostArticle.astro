@@ -43,7 +43,10 @@ const { post } = Astro.props;
 		)
 	}
 
-	<h1 class="mt-8 text-4xl leading-[1.05] font-extrabold tracking-tighter sm:text-5xl">
+	<h1
+		transition:name="title"
+		class="mt-8 text-4xl leading-[1.05] font-extrabold tracking-tighter sm:text-5xl"
+	>
 		{post.data.title}
 	</h1>
 
